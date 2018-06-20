@@ -11,6 +11,7 @@ bot_lang = 'eng'
 service = build("customsearch", "v1", developerKey = api_key)
 
 def capture_qa():
+    # capture question
     img = ImageGrab.grab(bbox=(35,170,388,280))
     query = pytesseract.image_to_string(img, lang = bot_lang).lower()
     query = query.replace("\n", " ").replace("?", "").replace('"', "").replace("'", "").replace(",", "")
@@ -21,6 +22,7 @@ def capture_qa():
 
     print query
 
+    # capture answers
     img = ImageGrab.grab(bbox=(60,327,315,383))
     img2 = ImageGrab.grab(bbox=(60,404,315,459))
     img3 = ImageGrab.grab(bbox=(60,480,315,537))
@@ -29,7 +31,7 @@ def capture_qa():
     answer2 = pytesseract.image_to_string(img2, lang = bot_lang).lower()
     answer3 = pytesseract.image_to_string(img3, lang = bot_lang).lower()
     
-    # split for search method
+    # multi word answers split for search method
     split1 =  answer1.split(' ')
     split2 =  answer2.split(' ')
     split3 =  answer3.split(' ')
@@ -41,7 +43,8 @@ def capture_qa():
     ans1Counter = 0
     ans2Counter = 0
     ans3Counter = 0
-    
+
+    # basic google search
     webbrowser.open("http://google.com/?#q=" + query)
 
     res = service.cse().list(q=query,cx=search_engine_id,).execute()
